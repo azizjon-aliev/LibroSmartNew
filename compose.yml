@@ -1,0 +1,53 @@
+services:
+  nginx:
+    container_name: nginx_container
+    build: nginx
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    volumes:
+      - static_files:/code/static
+      - media_files:/code/media
+    depends_on:
+      - api
+    networks:
+      - default_network
+
+  api:
+    container_name: api_container
+    build: .
+    restart: on-failure
+    command: sh scripts/start_api.sh
+    env_file:
+      - .env
+    ports:
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
+    volumes:
+      - static_files:/code/static
+      - media_files:/code/media
+    depends_on:
+      - db
+    networks:
+      - default_network
+
+  db:
+    container_name: db_container
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default_network
+
+volumes:
+  static_files:
+  media_files:
+  postgres_data:
+  redis_data:
+
+networks:
+  default_network:
