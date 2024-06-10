@@ -1,5 +1,8 @@
 # Libro Smart
 
+[video instruction](https://www.youtube.com/watch?v=Fx3q4xp_Ey8) 
+
+
 ## Setup
 
 ### Clone project
